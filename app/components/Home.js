@@ -21,6 +21,7 @@ export default class Home extends Component {
     this.handleChangeTags = this.handleChangeTags.bind(this);
     this.handleChangeQuestion = this.handleChangeQuestion.bind(this);
     this.handleChangeSolution = this.handleChangeSolution.bind(this);
+    this.emptyDialogs = this.emptyDialogs.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.enableTab = this.enableTab.bind(this);
   }
@@ -41,16 +42,23 @@ export default class Home extends Component {
     this.setState({ solution: event.target.value });
   }
 
-  // enableTab(e) {
-    // add onKeyDown={this.enableTab} to solution's textarea
+  emptyDialogs() {
+    this.setState({ title: '' });
+    this.setState({ tags: '' });
+  }
 
-    // need to figure this out:
+  /*
+  enableTab(e) {
+    add onKeyDown={this.enableTab} to solution's textarea
 
-    // possible help:
-    // https://css-tricks.com/snippets/javascript/support-tabs-in-textareas/
+    need to figure this out:
 
-    // or just go full steam ahead and embed a code editor (not likely!)
-  // }
+    possible help:
+    https://css-tricks.com/snippets/javascript/support-tabs-in-textareas/
+
+    or just go full steam ahead and embed a code editor (not likely!)
+  }
+  */
 
   handleSubmit(event) {
     // generating file name and path
@@ -72,11 +80,14 @@ export default class Home extends Component {
         alert(`An error ocurred creating the file ${err.message}`);
       }
       // open file in atom editor
-      exec(`atom ${fNameAndPath}`, (error, stdout, stderr) => {
+      // note full path necessary (ref: https://discuss.atom.io/t/how-to-execute-node-js-child-process-from-package/4880/12)
+      exec(`/usr/local/bin/atom ${fNameAndPath}`, (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
+          alert(`exec error: ${error}`);
           return;
         }
+        this.emptyDialogs();
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
       });
@@ -90,18 +101,26 @@ export default class Home extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          <div className={`${styles.formItem} ${styles.oneLiners}`}>
-            <input type="text" value={this.state.title} onChange={this.handleChangeTitle} id="title" placeholder={'title'} />
-            <input type="text" value={this.state.tags} onChange={this.handleChangeTags} id="tags" placeholder={'tags'} />
-          </div>
-          <div className={`${styles.formItem} ${styles.questionContainer}`}>
-            <textarea type="text" value={this.state.question} onChange={this.handleChangeQuestion} id={styles.question} placeholder={'question -- currently useless'} />
-          </div>
-          <div className={`${styles.formItem} ${styles.biggerContainer}`}>
-            <textarea type="text" value={this.state.solution} onChange={this.handleChangeSolution} id={styles.solution} placeholder={'solution -- currently useless'} />
+          {/* change back to this when Question/Solution added:
+            <div className={`${styles.formItem} ${styles.oneLiners}`}>
+             both tags and title will be in one formItem bunched together
+            */}
+          <div className={styles.formItem}>
+            <input type="text" value={this.state.title} onChange={this.handleChangeTitle} id={styles.title} placeholder={'title'} />
           </div>
           <div className={styles.formItem}>
-            <button onClick={this.handleSubmit}>Click me</button>
+            <input type="text" value={this.state.tags} onChange={this.handleChangeTags} id={styles.tags} placeholder={'tags'} />
+          </div>
+          {/* <div className={`${styles.formItem} ${styles.questionContainer}`}>
+            <textarea type="text" value={this.state.question} onChange={this.handleChangeQuestion}
+                id={styles.question} placeholder={'question'} />
+          </div>
+          <div className={`${styles.formItem} ${styles.biggerContainer}`}>
+            <textarea type="text" value={this.state.solution} onChange={this.handleChangeSolution}
+                id={styles.solution} placeholder={'solution'} />
+          </div>*/}
+          <div className={styles.formItem}>
+            <button onClick={this.handleSubmit}>create template</button>
           </div>
         </div>
       </div>
