@@ -1,0 +1,41 @@
+.container {
+  position: absolute;
+  height: 90%;
+  width: 100%;
+  text-align: center;
+}
+
+.formContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+}
+
+.formItem {
+
+}
+
+.oneLiners {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.questionContainer {
+  flex-grow: 0.15;
+}
+
+.biggerContainer {
+  flex-grow: 1;
+}
+
+#question,
+#solution {
+  width: 100%;
+  height: 100%;
+}
